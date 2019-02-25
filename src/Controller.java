@@ -6,7 +6,7 @@
 
 /**
  *
- * @author Валерия
+ * @author Алексей
  */
 public class Controller {
     View view;

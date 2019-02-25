@@ -9,11 +9,10 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Валерия
+ * @author Алексей
  */
 public class Model {
     int[][] field;
-    boolean changed;
     boolean stopped;
     Controller contr;
     String rules="Условия жизни клеток:\n" +

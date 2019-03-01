@@ -9,26 +9,43 @@
  * @author Алексей
  */
 public class Controller {
+
     View view;
     Model model;
-    Controller(View v, Model m){
-        this.model=m;
-        this.view=v;
+
+    Controller(View v, Model m) {
+        this.model = m;
+        this.view = v;
+        model.subscribe(this);
+        view.controller = this;
     }
-    public void startGame(){
+
+    public void startGame() {
         model.gameProcess();
-        
+
     }
-    public void stopGame(){
+
+    public void stopGame() {
         System.out.println("Заглушка из метода stopGame");
-        
+        model.stopped = true;
+
     }
-    public void showRules(){
-        model
+
+    public void showRules() {
+        model.showRules();
     }
-    public void update(int[][] field){
+
+    public void update(int[][] field) {
+//        for (int i = 0; i < 8; i++) {
+//            for (int j = 0; j < 8; j++) {
+//                
+//                System.out.print(field[i][j]+" ");
+//            }
+//            System.out.println("");
+//        }
+
         view.update(field);
-        
+
     }
-    
+
 }

@@ -1,11 +1,10 @@
 
 import java.awt.Color;
 import java.awt.Component;
-import javax.swing.JLabel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -386,7 +385,13 @@ public class View extends javax.swing.JFrame {
     //Пуск игры
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        controller.startGame(jTable1);
+       
+        try {
+            controller.startGame(jTable1);
+        } catch (InterruptedException ex) {
+           
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     //Стоп игры
@@ -411,6 +416,7 @@ public class View extends javax.swing.JFrame {
        
         YourTableCellRenderer cr = new YourTableCellRenderer();
         jTable1.setDefaultRenderer(Object.class, cr);
+
     }
 
     public class YourTableCellRenderer
@@ -439,6 +445,7 @@ public class View extends javax.swing.JFrame {
 
                 c.setBackground(Color.red);
                 c.setForeground(Color.red);
+                
 
             } else {
                 c.setBackground(Color.white);

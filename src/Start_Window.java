@@ -1,3 +1,6 @@
+
+import javax.swing.JOptionPane;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -102,12 +105,15 @@ public class Start_Window extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        if((Integer.parseInt(jTextField1.getText())<8)||(Integer.parseInt(jTextField2.getText())<8) ){
+            JOptionPane.showMessageDialog(null, "Минимальный размер поля: 8х8");
+        } else{
         col_count=Integer.parseInt(jTextField1.getText());
         row_count=Integer.parseInt(jTextField2.getText());
         this.setVisible(false);
         View view= new View(row_count, col_count);
         view.run();
-        
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

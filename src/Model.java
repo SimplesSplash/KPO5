@@ -1,7 +1,5 @@
 
-
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -16,6 +14,7 @@ public class Model {
 
     int[][] field;
     boolean stopped;
+    boolean changed;
     Controller contr;
     String rules = "Условия жизни клеток:\n"
             + "в пустой (мёртвой) клетке, рядом с которой ровно три живые клетки, зарождается жизнь;\n"
@@ -30,56 +29,104 @@ public class Model {
             + "• при очередном шаге ни одна из клеток не меняет своего состояния (складывается стабильная\n"
             + "конфигурация; предыдущее правило, вырожденное до одного шага назад)";
 
-    public void gameProcess(JTable jTable1) {
-         int n = jTable1.getRowCount();
-        int m = jTable1.getColumnCount();
-        
+    public Model() {
+        this.changed = true;
+    }
+   
+    
+    public void gameProcess(int[][] startField) throws InterruptedException {
+//        TimeUnit.SECONDS.sleep(1);
+        // System.out.println("Заглушка из метода gameProcess");
+       int n = startField.length;
+        int m = startField[0].length;
         if (field == null) {
             field = new int[n][m];
 
             System.out.println("qqq" + field.length);
 
             for (int i = 0; i < n; i++) {
-                for (int j = 0; j < m; j++) {
-                    field[i][j] = 0;
-                }
+                System.arraycopy(startField[i], 0, field[i], 0, m);
             }
 
         }
-       
-          System.out.println("qqq" + field.length);
+        while(changed && aliveExists()){
+           
+        changed = false;
+
+        test();
+        
+
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                field[i][j] = Integer.parseInt(jTable1.getValueAt(i, j).toString());
-                System.out.print(field[i][j] + " ");
+                if (field[i][j] == 0) {
+                    if (countSosed(i, j, n, m) == 3) {
+                        field[i][j] = 1;
+                        changed = true;
+//                        notifySub();
+                        
+ 
+                   
+                    }
+                }
             }
-            System.out.println("");
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (field[i][j] == 1) {
+                    if ((countSosed(i, j, n, m) < 2) || (countSosed(i, j, n, m) > 3)) {
+                        field[i][j] = 0;
+                        changed = true;
+//                        notifySub();
+                        
 
-        }
-        int count = 0;
-        for (int i = 1; i < n - 1; i++) {
-            for (int j = 1; j < m - 1; j++) {
-                if ((field[i][j]==1)&&(field[i + 1][j + 1] == 1)) {
-                    count++;
+                       
+                    }
                 }
-                if ((field[i][j]==1)&&(field[i - 1][j - 1] == 1)) {
-                    count++;
-                }
-                if ((field[i][j]==1)&&(field[i - 1][j] == 1)) {
-                    count++;
-                }
-                if ((field[i][j]==1)&&(field[i + 1][j] == 1)) {
-                    count++;
-                }
-                if (count >= 1) {
-                    field[i][j] = 1;
-                } else {
-                    field[i][j] = 0;
-                }
-                count = 0;
             }
         }
-        notifySub();
+      notifySub();  
+    }
+
+//        JOptionPane.showMessageDialog(null, "END!");
+    }
+    public boolean aliveExists(){
+        int n = field.length;
+        int m = field[0].length;
+         for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if(field[i][j]==1){
+                    return true;
+                }
+            }
+         }
+         return false;
+    }
+    
+
+    public int endMassive(int i0, int j0, int n, int m) {
+        if (i0 < 0 || j0 < 0 || i0 > n || j0 > m) {
+            return 0;
+        }
+        try {
+            int item = field[i0][j0];
+            return item;
+        } catch (ArrayIndexOutOfBoundsException e) {
+        }
+        return 0;
+
+    }
+
+    public int countSosed(int i0, int j0, int n, int m) {
+        int count = 0;
+        count += endMassive(i0 - 1, j0, n, m);
+        count += endMassive(i0 - 1, j0 + 1, n, m);
+        count += endMassive(i0, j0 - 1, n, m);
+        count += endMassive(i0, j0 + 1, n, m);
+        count += endMassive(i0 + 1, j0 - 1, n, m);
+        count += endMassive(i0 + 1, j0 + 1, n, m);
+        count += endMassive(i0 + 1, j0, n, m);
+        count += endMassive(i0 - 1, j0 - 1, n, m);
+        return count;
     }
 
     public void showRules() {
@@ -90,7 +137,7 @@ public class Model {
         this.contr = c;
     }
 
-    public void notifySub() {
+    public void notifySub() throws InterruptedException {
         contr.update(field);
     }
 

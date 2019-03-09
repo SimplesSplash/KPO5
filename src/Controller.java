@@ -1,5 +1,6 @@
 
 import javax.swing.JTable;
+import javax.swing.table.TableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,8 +24,19 @@ public class Controller {
         view.controller = this;
     }
 
-    public void startGame(JTable jTable1) {
-        model.gameProcess(jTable1);
+    public void startGame(JTable jTable1) throws InterruptedException {
+        int[][] mas;
+        TableModel mod=jTable1.getModel();
+        mas=new int[mod.getRowCount()][mod.getColumnCount()];
+        for(int i=0;i<mod.getRowCount();i++){
+            for(int j=0;j<mod.getColumnCount();j++){
+                
+                mas[i][j]=Integer.parseInt((String) mod.getValueAt(i, i));
+                
+            }
+        }
+        
+        model.gameProcess(mas);
 
     }
 
@@ -38,14 +50,7 @@ public class Controller {
         model.showRules();
     }
 
-    public void update(int[][] field) {
-//        for (int i = 0; i < 8; i++) {
-//            for (int j = 0; j < 8; j++) {
-//                
-//                System.out.print(field[i][j]+" ");
-//            }
-//            System.out.println("");
-//        }
+    public void update(int[][] field){
 
         view.update(field);
 

@@ -1,3 +1,6 @@
+
+import javax.swing.JTable;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -20,8 +23,8 @@ public class Controller {
         view.controller = this;
     }
 
-    public void startGame() {
-        model.gameProcess();
+    public void startGame(JTable jTable1) {
+        model.gameProcess(jTable1);
 
     }
 

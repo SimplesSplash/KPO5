@@ -1,5 +1,7 @@
 
+
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -28,9 +30,56 @@ public class Model {
             + "• при очередном шаге ни одна из клеток не меняет своего состояния (складывается стабильная\n"
             + "конфигурация; предыдущее правило, вырожденное до одного шага назад)";
 
-    public void gameProcess() {
-        System.out.println("Заглушка из метода gameProcess");
-        test();
+    public void gameProcess(JTable jTable1) {
+         int n = jTable1.getRowCount();
+        int m = jTable1.getColumnCount();
+        
+        if (field == null) {
+            field = new int[n][m];
+
+            System.out.println("qqq" + field.length);
+
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    field[i][j] = 0;
+                }
+            }
+
+        }
+       
+          System.out.println("qqq" + field.length);
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                field[i][j] = Integer.parseInt(jTable1.getValueAt(i, j).toString());
+                System.out.print(field[i][j] + " ");
+            }
+            System.out.println("");
+
+        }
+        int count = 0;
+        for (int i = 1; i < n - 1; i++) {
+            for (int j = 1; j < m - 1; j++) {
+                if ((field[i][j]==1)&&(field[i + 1][j + 1] == 1)) {
+                    count++;
+                }
+                if ((field[i][j]==1)&&(field[i - 1][j - 1] == 1)) {
+                    count++;
+                }
+                if ((field[i][j]==1)&&(field[i - 1][j] == 1)) {
+                    count++;
+                }
+                if ((field[i][j]==1)&&(field[i + 1][j] == 1)) {
+                    count++;
+                }
+                if (count >= 1) {
+                    field[i][j] = 1;
+                } else {
+                    field[i][j] = 0;
+                }
+                count = 0;
+            }
+        }
+        notifySub();
     }
 
     public void showRules() {
@@ -46,23 +95,7 @@ public class Model {
     }
 
     public void test() {
-        field = new int[8][8];
-        System.out.println("qqq" + field.length);
 
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                field[i][j] = 1;
-               // System.out.print(field[i][j]+" ");
-            }
-            //System.out.println("");
-        }
-        field[1][1] = 0;
-        field[1][5] = 0;
-
-      
-        
-     
-        contr.update(field);
     }
 
 }

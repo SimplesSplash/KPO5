@@ -1,5 +1,8 @@
 
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.SwingWorker;
 import javax.swing.table.TableModel;
 
 /*
@@ -15,33 +18,41 @@ import javax.swing.table.TableModel;
 public class Controller {
 
     View view;
-    Model model;
+   Model model;
+    Integer[][] field;
 
-    Controller(View v, Model m) {
-        this.model = m;
+    Controller(View v) {
         this.view = v;
-        model.subscribe(this);
         view.controller = this;
     }
 
     public void startGame(JTable jTable1) throws InterruptedException {
-        int[][] mas;
-        TableModel mod=jTable1.getModel();
-        mas=new int[mod.getRowCount()][mod.getColumnCount()];
-        for(int i=0;i<mod.getRowCount();i++){
-            for(int j=0;j<mod.getColumnCount();j++){
-                
-                mas[i][j]=Integer.parseInt((String) mod.getValueAt(i, i));
-                
-            }
-        }
-        
-        model.gameProcess(mas);
+        model= new Model();
+         model.subscribe(this);
+          model.ended=false;
+          model.stopped=false;
+        FlipTask task =  new FlipTask(this);
+           task.execute();
+
 
     }
 
+    public Integer[][] getDataFromTable(JTable jTable1) throws NumberFormatException {
+        Integer[][] mas;
+        TableModel mod=jTable1.getModel();
+        mas=new Integer[mod.getRowCount()][mod.getColumnCount()];
+        for(int i=0;i<mod.getRowCount();i++){
+            for(int j=0;j<mod.getColumnCount();j++){
+                
+                mas[i][j]=Integer.parseInt((String) mod.getValueAt(i, j));
+                
+            }
+        }
+        return mas;
+    }
+
     public void stopGame() {
-        System.out.println("Заглушка из метода stopGame");
+        
         model.stopped = true;
 
     }
@@ -50,10 +61,46 @@ public class Controller {
         model.showRules();
     }
 
-    public void update(int[][] field){
+    public void update(Integer[][] field){
 
         view.update(field);
 
     }
 
-}
+
+
+public class FlipTask extends SwingWorker<Void, Integer[][]> {
+           Controller c;
+          
+            Integer[][] field;
+
+        public FlipTask(Controller c) {
+            this.c = c;
+           
+        }
+          @Override
+        protected Void doInBackground() throws InterruptedException  {
+             Model m = c.model;
+             Integer[][] mas=c.getDataFromTable(c.view.getjTable1());
+              m.setField(mas);
+              while(!m.ended){
+                   m.gameProcess(m.field);
+            Thread.sleep(100);
+            field=c.field;
+              publish(field);
+                  
+           }
+              JOptionPane.showMessageDialog(view,"END!");
+                   return null;
+              }
+
+            @Override
+        protected void process(List<Integer[][]> fields) {
+            Integer[][] field = fields.get(fields.size()-1);
+            c.view.update(field);
+           c.view.getjTable1().validate();
+        }
+        }
+ 
+        
+    }

@@ -12,9 +12,10 @@ import javax.swing.JOptionPane;
  */
 public class Model {
 
-    int[][] field;
+    Integer[][] field;
     boolean stopped;
     boolean changed;
+    boolean ended;
     Controller contr;
     String rules = "Условия жизни клеток:\n"
             + "в пустой (мёртвой) клетке, рядом с которой ровно три живые клетки, зарождается жизнь;\n"
@@ -29,79 +30,72 @@ public class Model {
             + "• при очередном шаге ни одна из клеток не меняет своего состояния (складывается стабильная\n"
             + "конфигурация; предыдущее правило, вырожденное до одного шага назад)";
 
+    public void setField(Integer[][] field) {
+        this.field = field;
+    }
+
     public Model() {
         this.changed = true;
+        this.ended=false;
     }
-   
-    
-    public void gameProcess(int[][] startField) throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(1);
-        // System.out.println("Заглушка из метода gameProcess");
-       int n = startField.length;
+
+    public void gameProcess(Integer[][] startField) throws InterruptedException {
+        int n = startField.length;
         int m = startField[0].length;
         if (field == null) {
-            field = new int[n][m];
-
-            System.out.println("qqq" + field.length);
+            field = new Integer[n][m];
 
             for (int i = 0; i < n; i++) {
                 System.arraycopy(startField[i], 0, field[i], 0, m);
             }
 
         }
-        while(changed && aliveExists()){
-           
-        changed = false;
+        if (changed && aliveExists() && !stopped) {
 
-        test();
-        
+            changed = false;
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if (field[i][j] == 0) {
-                    if (countSosed(i, j, n, m) == 3) {
-                        field[i][j] = 1;
-                        changed = true;
-//                        notifySub();
-                        
- 
-                   
+
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    if (field[i][j] == 0) {
+                        if (countSosed(i, j, n, m) == 3) {
+                            field[i][j] = 1;
+                            changed = true;
+
+                        }
                     }
                 }
             }
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    if (field[i][j] == 1) {
+                        if ((countSosed(i, j, n, m) < 2) || (countSosed(i, j, n, m) > 3)) {
+                            field[i][j] = 0;
+                            changed = true;
+
+                        }
+                    }
+                }
+            }
+            notifySub();
         }
+        else {
+            this.ended=true;
+        }
+    }
+
+    public boolean aliveExists() {
+        int n = field.length;
+        int m = field[0].length;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 if (field[i][j] == 1) {
-                    if ((countSosed(i, j, n, m) < 2) || (countSosed(i, j, n, m) > 3)) {
-                        field[i][j] = 0;
-                        changed = true;
-//                        notifySub();
-                        
-
-                       
-                    }
-                }
-            }
-        }
-      notifySub();  
-    }
-
-//        JOptionPane.showMessageDialog(null, "END!");
-    }
-    public boolean aliveExists(){
-        int n = field.length;
-        int m = field[0].length;
-         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                if(field[i][j]==1){
                     return true;
                 }
             }
-         }
-         return false;
+        }
+        return false;
     }
-    
 
     public int endMassive(int i0, int j0, int n, int m) {
         if (i0 < 0 || j0 < 0 || i0 > n || j0 > m) {
@@ -138,7 +132,7 @@ public class Model {
     }
 
     public void notifySub() throws InterruptedException {
-        contr.update(field);
+        contr.field = field;
     }
 
     public void test() {

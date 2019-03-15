@@ -230,8 +230,6 @@ public class View extends javax.swing.JFrame {
         // TODO add your handling code here:
         int Row = jTable1.getSelectedRow();
         int Column = jTable1.getSelectedColumn();
-        System.out.print(Row);
-        System.out.println(Column);
         if ("1".equals(jTable1.getValueAt(Row, Column))) {
             jTable1.setValueAt("0", Row, Column);
 
@@ -400,16 +398,14 @@ public class View extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    public void update(int[][] field) {
+    public void update(Integer[][] field) {
 
         for (int i = 0; i < field.length; i++) {
             for (int j = 0; j < field.length; j++) {
-             // if (jTable1.getValueAt(i, j)==null){
+
                String str = Integer.toString(field[i][j]);
                 jTable1.setValueAt(str, i, j);
-            //  }else{
-              // field[i][j] = Integer.parseInt(jTable1.getValueAt(i, j).toString());
-             //}
+
                
             }
         }
@@ -417,6 +413,10 @@ public class View extends javax.swing.JFrame {
         YourTableCellRenderer cr = new YourTableCellRenderer();
         jTable1.setDefaultRenderer(Object.class, cr);
 
+    }
+
+    public JTable getjTable1() {
+        return jTable1;
     }
 
     public class YourTableCellRenderer
@@ -490,8 +490,8 @@ public class View extends javax.swing.JFrame {
 //                View view = new View();
                 this.setVisible(true);
 
-                Model model = new Model();
-                Controller controller = new Controller(this, model);
+//                Model model = new Model();
+                Controller controller = new Controller(this);
             }
 //        });
 //    }

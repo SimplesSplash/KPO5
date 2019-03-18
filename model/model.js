@@ -42,7 +42,14 @@ class gameField{
                     return 0;
                 }
                 let item=field[i0][j0];
-                return item===NaN ? 0 : 1;
+                if(item===NaN || item===0){
+                    return 0;
+                }
+                 else {
+                    return 1;
+                }
+                
+               
             }
             
             let result=0;
@@ -62,8 +69,26 @@ class gameField{
    
 
     life(){
-       // alert("pusk");
-        let n=this.mainField.length;
+      let victim = 1;
+      let predator =2;
+      
+//    Слкчайность введена для равномерного создания видов.
+//    Иначе вид, создаваемый первым, преобладает.  
+   
+      if(Math.random()<0.5){
+          this.born(victim);
+          this.born(predator);
+      } else {
+          this.born(predator);
+          this.born(victim);
+      }
+      this.death();
+      
+        drawSubField(this.mainField);
+    }
+    
+   born(type){
+       let n=this.mainField.length;
         let m=this.mainField[0].length;
 
         for(let i=1; i<n; ++i){
@@ -72,31 +97,14 @@ class gameField{
                 
                    if(this.mainField[i][j]===0){
                         if(this.neighborsCount(i,j)===3){
-                            this.mainField[i][j]=1;
+                            this.mainField[i][j]=type;
                         }
                    } 
                 }
         
         }
 
-         for(let i=0; i<n; ++i){
-        
-                for(let j=0; j<m; ++j){
-                
-                   if(this.mainField[i][j]===1){
-                        let neighbors=this.neighborsCount(i,j)
-                        if(neighbors<2 || neighbors>3){
-                            this.mainField[i][j]=0;
-                        }
-                   } 
-                }
-        
-        }
-      //  alert(this.mainField);
-        drawSubField(this.mainField);
-    }
-    
-   
+   }
 
     death(){
         let n=this.mainField.length;
@@ -106,7 +114,7 @@ class gameField{
         
                 for(let j=0; j<m; ++j){
                 
-                   if(this.mainField[i][j]===1){
+                   if(this.mainField[i][j]===1 || this.mainField[i][j]===2){
                         let neighbors=this.neighborsCount(i,j)
                         if(neighbors<2 || neighbors>3){
                             this.mainField[i][j]=0;

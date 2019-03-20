@@ -6,6 +6,7 @@
 */
 
 
+
 //Подключаем канвас
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
@@ -42,8 +43,8 @@ canvas.onclick = function(event)
 	//получаем координаты нажатия
 	var x = event.offsetX;
 	var y = event.offsetY;	
-	console.log(x);
-	console.log(y);
+	//console.log(x);
+	//console.log(y);
 
 
 	x = Math.floor(x/100); //800/100 = 8
@@ -62,7 +63,7 @@ canvas.onclick = function(event)
 		subFieldArr[y][x] = 0
 	}
 
-	console.log(subFieldArr);
+	//console.log(subFieldArr);
 	drawSubField(subFieldArr);
 	
 
@@ -158,8 +159,8 @@ function randomFill()
             rand = Math.floor(Math.random() * (2 - 1 + 1)) + 1;
 
 			
-	        console.log("x=" + x);
-	        console.log("y=" + y);
+	        //console.log("x=" + x);
+	       // console.log("y=" + y);
 	    	
 	    	if(subFieldArr[x][y] == 0)
 	    	{

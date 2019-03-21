@@ -18,7 +18,7 @@ var ctx = canvas.getContext("2d");
 var blockSize = 1,
     myColor = "silver",
     predator = "red",
-	herbivorous = "green",
+    herbivorous = "green",
 
     subFieldPosX = 0,
     subFieldPosY = 0,
@@ -35,11 +35,11 @@ function getField()
 
 
 
-//РїСЂРё РЅР°Р¶Р°С‚РёРё РЅР° РєРґРµС‚РєСѓ РІС‹Р·С‹РІР°РµС‚СЃСЏ РјРµС‚РѕРґ drawSubField()
+//при нажатии на кдетку вызывается метод drawSubField()
 
 canvas.onclick = function(event)
 {
-	//РїРѕР»СѓС‡Р°РµРј РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅР°Р¶Р°С‚РёСЏ
+        //получаем координаты нажатия   
 	var x = event.offsetX;
 	var y = event.offsetY;	
 	console.log(x);
@@ -56,8 +56,8 @@ canvas.onclick = function(event)
 	}
 	else if(subFieldArr[y][x] == 1)
 	{
-	    subFieldArr[y][x] = 2
-	}else if (subFieldArr[y][x] == 2)
+	    subFieldArr[y][x] = -1
+	}else if (subFieldArr[y][x] == -1)
 	{
 		subFieldArr[y][x] = 0
 	}
@@ -68,7 +68,7 @@ canvas.onclick = function(event)
 
 }
 
-//СЂР°Р·РґРµР»СЏРј РїРѕР»Рµ РЅР° РІРѕСЃРµРјСЊ С‡Р°СЃС‚РµР№
+//разделям поле на восемь частей
 drawField = function()
 {
 	var n = 8, m = 8;
@@ -108,10 +108,11 @@ function drawSubField(FieldArr)
 	{ 
 	    for(var j = 0; j < 8; j++)
 	    {
-	    	//РїСЂРёСЃРІР°РµРІР°Рј РјР°СЃСЃРёРІСѓ 1 РµСЃР»Рё РЅР° РЅРµРј РµСЃС‚СЊ РєР»РёРє
-	    	if(FieldArr[i][j] == 1)
+
+	    	if(FieldArr[i][j] > 0)
 	    	{
-	    		ctx.fillStyle  = predator;
+	    		ctx.fillStyle  = 'rgb(' + Math.floor(255-39*FieldArr[i][j]) + ',' +
+                    '0' + ',0)';
 	    		ctx.fillRect(j*100+1, i*63+1, 98, 61);
 	    	}
 	    	else if(FieldArr[i][j] == 0)
@@ -119,12 +120,14 @@ function drawSubField(FieldArr)
 	    		ctx.fillStyle  = "white";
 	    		ctx.fillRect(j*100+1, i*63+1, 98, 61);
 	    	}
-			else if(FieldArr[i][j] == 2)
+			else if(FieldArr[i][j] < 0)
 	    	{
-	    		ctx.fillStyle  = herbivorous;
-	    		ctx.fillRect(j*100+1, i*63+1, 98, 61);
+	    		ctx.fillStyle  = 'rgb(0,' +
+                    Math.floor(255-39*(-FieldArr[i][j])) + ',0)';
+	    		
 	    	}
-
+                
+                ctx.fillRect(j*100+1, i*63+1, 98, 61);
 
 	    }	
 
@@ -138,7 +141,7 @@ function randomFill()
 
 	if(fieldRandom > 20 || fieldRandom < 3)
 	{
-		alert("РЎР»СѓС‡Р°Р№РЅРѕРµ Р·Р°РїРѕР»РЅРµРЅРёРµ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ Р±РѕР»СЊС€Рµ 10 РёР»Рё РјРµРЅСЊС€Рµ 3");
+		alert("Случайное заполнение не должно быть больше 10 или меньше 3");
 	}
 
 	for(var i = 0; i < n; i++)
@@ -155,7 +158,9 @@ function randomFill()
    {				
    			x = Math.floor(Math.random()*8); 
 			y = Math.floor(Math.random()*8); 
-            rand = Math.floor(Math.random() * (2 - 1 + 1)) + 1;
+            rand = Math.floor(Math.random() * (1 - (-1) + 1)) + (-1);
+         
+
 
 			
 	        console.log("x=" + x);

@@ -15,14 +15,12 @@ function buttonStart() {
     let g = new gameField(Field1);
 
 
+g.life();
+    // while (g.checkGameOver() == false) {
+    //     g.life();
 
-    while (g.checkGameOver() == false) {
-        g.life();
-
-        
-
-    }
-    alert("Game Over");
+    // }
+    // alert("Game Over");
 
 
 
@@ -49,25 +47,18 @@ class gameField {
         let mainField = this.mainField;
         let field = this.mainField;
 
-        function get(i0, j0) {
+  function get(i0, j0) {
 
             if (i0 < 0 || j0 < 0 || i0 > n || j0 > m) {
                 return 0;
             }
             let item = field[i0][j0];
-
+            
             if (item == value) {
                 return 1;
             } else {
                 return 0;
             }
-
-            // if(item===NaN || item===0){
-            //     return 0;
-            // }
-            //  else {
-            //     return 1;
-            // }
 
 
         }
@@ -82,9 +73,43 @@ class gameField {
         result += get(i + 1, j);
         result += get(i - 1, j - 1);
         return result;
+}
+    //     function get(i0, j0) {
+
+    //         if (i0 < 0 || j0 < 0 || i0 > n || j0 > m) {
+    //             return 0;
+    //         }
+    //         let item = field[i0][j0];
+
+    //         if (item == value) {
+    //             return 1;
+    //         } else {
+    //             return 0;
+    //         }
+
+    //         // if(item===NaN || item===0){
+    //         //     return 0;
+    //         // }
+    //         //  else {
+    //         //     return 1;
+    //         // }
 
 
-    }
+    //     }
+
+    //     let result = 0;
+    //     result += get(i - 1, j);
+    //     result += get(i - 1, j + 1);
+    //     result += get(i, j - 1);
+    //     result += get(i, j + 1);
+    //     result += get(i + 1, j - 1);
+    //     result += get(i + 1, j + 1);
+    //     result += get(i + 1, j);
+    //     result += get(i - 1, j - 1);
+    //     return result;
+
+
+    // }
 
 
 
@@ -158,8 +183,8 @@ class gameField {
 
 
 
-        let victim = 1;
-        let predator = 2;
+        let victim = -1;
+        let predator = 1;
 
 
         //    Слкчайность введена для равномерного создания видов.
@@ -202,20 +227,56 @@ class gameField {
         }
     }
 
-    death() {
-        //alert("de");
+    // death() {
+    //     //alert("de");
+    //     let n = this.mainField.length;
+    //     let m = this.mainField[0].length;
+
+    //     for (let i = 0; i < n; ++i) {
+
+    //         for (let j = 0; j < m; ++j) {
+
+    //             if (this.mainField[i][j] === 1 || this.mainField[i][j] === 2) {
+    //                 let neighbors = this.neighborsCount(i, j, this.mainField[i][j])
+    //                 if (neighbors < 2 || neighbors > 3) {
+    //                     this.mainField[i][j] = 0;
+    //                 }
+    //             }
+    //         }
+
+    //     }
+    // }
+
+      death() {
         let n = this.mainField.length;
         let m = this.mainField[0].length;
-
+        
+//        Ôóíêöèÿ ñòàðåíèÿ
+//        Åñëè êëåòêà íå óìåðëà, òî åå çíà÷åíèå óâåëè÷èâàåòñÿ/óìåíüøàåòñÿ
+//        â ñîîòâåòñòâèè ñ ïîïóëÿöèåé. Êëåòêè Ñòàðøå 5 ïîêîëåíèé óìèðàþò.
+        function  aging(i, j, Field) {
+            if (Field[i][j] > 0) {
+                Field[i][j] += 1;
+            } else {
+                Field[i][j] -= 1;
+            }
+            if (Math.abs(Field[i][j]) > 5) {
+                Field[i][j] = 0;
+            }
+        }
+        
         for (let i = 0; i < n; ++i) {
 
             for (let j = 0; j < m; ++j) {
 
-                if (this.mainField[i][j] === 1 || this.mainField[i][j] === 2) {
+                if (this.mainField[i][j] !== 0) {
                     let neighbors = this.neighborsCount(i, j, this.mainField[i][j])
                     if (neighbors < 2 || neighbors > 3) {
                         this.mainField[i][j] = 0;
+                    } else {
+                        aging(i, j, this.mainField);
                     }
+
                 }
             }
 
@@ -274,23 +335,23 @@ class gameField {
                     count = 0;
                     j_first = j;
 
-                    countEnemy += this.enemyCheck(i - 1, j - 1, 1);
-                    countEnemy += this.enemyCheck(i, j - 1, 1);
-                    countEnemy += this.enemyCheck(i + 1, j - 1, 1);
+                    countEnemy += this.enemyCheck(i - 1, j - 1, -1);
+                    countEnemy += this.enemyCheck(i, j - 1, -1);
+                    countEnemy += this.enemyCheck(i + 1, j - 1, -1);
 
 
                     do {
                         count++;
-                        countEnemy += this.enemyCheck(i - 1, j, 1);
-                        countEnemy += this.enemyCheck(i + 1, j, 1);
+                        countEnemy += this.enemyCheck(i - 1, j, -1);
+                        countEnemy += this.enemyCheck(i + 1, j, -1);
 
                         j++
                     } while (this.mainField[i][j - 1] === this.mainField[i][j])
 
 
-                    countEnemy += this.enemyCheck(i - 1, j, 1);
-                    countEnemy += this.enemyCheck(i, j, 1);
-                    countEnemy += this.enemyCheck(i + 1, j, 1);
+                    countEnemy += this.enemyCheck(i - 1, j, -1);
+                    countEnemy += this.enemyCheck(i, j, -1);
+                    countEnemy += this.enemyCheck(i + 1, j, -1);
 
 
                     console.log("count = " + count);
@@ -318,23 +379,23 @@ class gameField {
                     count = 0;
                     j_first = j;
 
-                    countEnemy += this.enemyCheck(i - 1, j - 1, 2);
-                    countEnemy += this.enemyCheck(i, j - 1, 2);
-                    countEnemy += this.enemyCheck(i + 1, j - 1, 2);
+                    countEnemy += this.enemyCheck(i - 1, j - 1, 1);
+                    countEnemy += this.enemyCheck(i, j - 1, 1);
+                    countEnemy += this.enemyCheck(i + 1, j - 1, 1);
 
 
                     do {
                         count++;
-                        countEnemy += this.enemyCheck(i - 1, j, 2);
-                        countEnemy += this.enemyCheck(i + 1, j, 2);
+                        countEnemy += this.enemyCheck(i - 1, j, 1);
+                        countEnemy += this.enemyCheck(i + 1, j, 1);
 
                         j++
                     } while (this.mainField[i][j - 1] === this.mainField[i][j])
 
 
-                    countEnemy += this.enemyCheck(i - 1, j, 2);
-                    countEnemy += this.enemyCheck(i, j, 2);
-                    countEnemy += this.enemyCheck(i + 1, j, 2);
+                    countEnemy += this.enemyCheck(i - 1, j, 1);
+                    countEnemy += this.enemyCheck(i, j, 1);
+                    countEnemy += this.enemyCheck(i + 1, j, 1);
 
 
                     console.log("count = " + count);

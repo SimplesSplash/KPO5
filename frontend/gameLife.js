@@ -1,13 +1,12 @@
 
 /*
-Разбиваем поле на массив 8х8, присваеваем каждому элементу массива 0.
-При клики на клетку присваеваем этому элементу 1, далее закрашиваем его.
+Ð Ð°Ð·Ð±Ð¸Ð²Ð°ÐµÐ¼ Ð¿Ð¾Ð»Ðµ Ð½Ð° Ð¼Ð°ÑÑÐ¸Ð² 8Ñ…8, Ð¿Ñ€Ð¸ÑÐ²Ð°ÐµÐ²Ð°ÐµÐ¼ ÐºÐ°Ð¶Ð´Ð¾Ð¼Ñƒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ñƒ Ð¼Ð°ÑÑÐ¸Ð²Ð° 0.
+ÐŸÑ€Ð¸ ÐºÐ»Ð¸ÐºÐ¸ Ð½Ð° ÐºÐ»ÐµÑ‚ÐºÑƒ Ð¿Ñ€Ð¸ÑÐ²Ð°ÐµÐ²Ð°ÐµÐ¼ ÑÑ‚Ð¾Ð¼Ñƒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ñƒ 1, Ð´Ð°Ð»ÐµÐµ Ð·Ð°ÐºÑ€Ð°ÑˆÐ¸Ð²Ð°ÐµÐ¼ ÐµÐ³Ð¾.
 
 */
 
 
-
-//Подключаем канвас
+//ÐŸÐ¾Ð´ÐºÐ»ÑŽÑ‡Ð°ÐµÐ¼ ÐºÐ°Ð½Ð²Ð°Ñ
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 
@@ -19,17 +18,14 @@ var ctx = canvas.getContext("2d");
 var blockSize = 1,
     myColor = "silver",
     predator = "red",
-	herbivorous = "green",
+    herbivorous = "green",
 
     subFieldPosX = 0,
     subFieldPosY = 0,
     subFieldArr = [];
 
     
-   
- function setField(Field){
- 	subFieldArr = Field;
- } 
+    
 
 
 function getField()
@@ -39,15 +35,15 @@ function getField()
 
 
 
-//при нажатии на кдетку вызывается метод drawSubField()
+//ïðè íàæàòèè íà êäåòêó âûçûâàåòñÿ ìåòîä drawSubField()
 
 canvas.onclick = function(event)
 {
-	//получаем координаты нажатия
+        //ïîëó÷àåì êîîðäèíàòû íàæàòèÿ   
 	var x = event.offsetX;
 	var y = event.offsetY;	
-	//console.log(x);
-	//console.log(y);
+	console.log(x);
+	console.log(y);
 
 
 	x = Math.floor(x/100); //800/100 = 8
@@ -60,19 +56,19 @@ canvas.onclick = function(event)
 	}
 	else if(subFieldArr[y][x] == 1)
 	{
-	    subFieldArr[y][x] = 2
-	}else if (subFieldArr[y][x] == 2)
+	    subFieldArr[y][x] = -1
+	}else if (subFieldArr[y][x] == -1)
 	{
 		subFieldArr[y][x] = 0
 	}
 
-	//console.log(subFieldArr);
+	console.log(subFieldArr);
 	drawSubField(subFieldArr);
 	
 
 }
 
-//разделям поле на восемь частей
+//ðàçäåëÿì ïîëå íà âîñåìü ÷àñòåé
 drawField = function()
 {
 	var n = 8, m = 8;
@@ -108,16 +104,15 @@ function drawSubField(FieldArr)
 {
 	//ctx.clearRect(0, 0, 800, 504);
 
-	//setField(FieldArr);
-
 	for(var i = 0; i < 8; i++)
 	{ 
 	    for(var j = 0; j < 8; j++)
 	    {
-	    	//присваевам массиву 1 если на нем есть клик
-	    	if(FieldArr[i][j] == 1)
+
+	    	if(FieldArr[i][j] > 0)
 	    	{
-	    		ctx.fillStyle  = predator;
+	    		ctx.fillStyle  = 'rgb(' + Math.floor(255-39*FieldArr[i][j]) + ',' +
+                    '0' + ',0)';
 	    		ctx.fillRect(j*100+1, i*63+1, 98, 61);
 	    	}
 	    	else if(FieldArr[i][j] == 0)
@@ -125,12 +120,14 @@ function drawSubField(FieldArr)
 	    		ctx.fillStyle  = "white";
 	    		ctx.fillRect(j*100+1, i*63+1, 98, 61);
 	    	}
-			else if(FieldArr[i][j] == 2)
+			else if(FieldArr[i][j] < 0)
 	    	{
-	    		ctx.fillStyle  = herbivorous;
-	    		ctx.fillRect(j*100+1, i*63+1, 98, 61);
+	    		ctx.fillStyle  = 'rgb(0,' +
+                    Math.floor(255-39*(-FieldArr[i][j])) + ',0)';
+	    		
 	    	}
-
+                
+                ctx.fillRect(j*100+1, i*63+1, 98, 61);
 
 	    }	
 
@@ -144,7 +141,7 @@ function randomFill()
 
 	if(fieldRandom > 20 || fieldRandom < 3)
 	{
-		alert("Случайное заполнение не должно быть больше 10 или меньше 3");
+		alert("Ñëó÷àéíîå çàïîëíåíèå íå äîëæíî áûòü áîëüøå 10 èëè ìåíüøå 3");
 	}
 
 	for(var i = 0; i < n; i++)
@@ -161,11 +158,13 @@ function randomFill()
    {				
    			x = Math.floor(Math.random()*8); 
 			y = Math.floor(Math.random()*8); 
-            rand = Math.floor(Math.random() * (2 - 1 + 1)) + 1;
+            rand = Math.floor(Math.random() * (1 - (-1) + 1)) + (-1);
+         
+
 
 			
-	        //console.log("x=" + x);
-	       // console.log("y=" + y);
+	        console.log("x=" + x);
+	        console.log("y=" + y);
 	    	
 	    	if(subFieldArr[x][y] == 0)
 	    	{

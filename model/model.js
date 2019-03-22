@@ -74,42 +74,7 @@ class gameField {
         result += get(i - 1, j - 1);
         return result;
 }
-    //     function get(i0, j0) {
-
-    //         if (i0 < 0 || j0 < 0 || i0 > n || j0 > m) {
-    //             return 0;
-    //         }
-    //         let item = field[i0][j0];
-
-    //         if (item == value) {
-    //             return 1;
-    //         } else {
-    //             return 0;
-    //         }
-
-    //         // if(item===NaN || item===0){
-    //         //     return 0;
-    //         // }
-    //         //  else {
-    //         //     return 1;
-    //         // }
-
-
-    //     }
-
-    //     let result = 0;
-    //     result += get(i - 1, j);
-    //     result += get(i - 1, j + 1);
-    //     result += get(i, j - 1);
-    //     result += get(i, j + 1);
-    //     result += get(i + 1, j - 1);
-    //     result += get(i + 1, j + 1);
-    //     result += get(i + 1, j);
-    //     result += get(i - 1, j - 1);
-    //     return result;
-
-
-    // }
+   
 
 
 
@@ -227,26 +192,7 @@ class gameField {
         }
     }
 
-    // death() {
-    //     //alert("de");
-    //     let n = this.mainField.length;
-    //     let m = this.mainField[0].length;
-
-    //     for (let i = 0; i < n; ++i) {
-
-    //         for (let j = 0; j < m; ++j) {
-
-    //             if (this.mainField[i][j] === 1 || this.mainField[i][j] === 2) {
-    //                 let neighbors = this.neighborsCount(i, j, this.mainField[i][j])
-    //                 if (neighbors < 2 || neighbors > 3) {
-    //                     this.mainField[i][j] = 0;
-    //                 }
-    //             }
-    //         }
-
-    //     }
-    // }
-
+  
       death() {
         let n = this.mainField.length;
         let m = this.mainField[0].length;

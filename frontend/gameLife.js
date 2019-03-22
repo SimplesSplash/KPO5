@@ -26,7 +26,10 @@ var blockSize = 1,
     subFieldArr = [];
 
     
-    
+   
+ function setField(Field){
+ 	subFieldArr = Field;
+ } 
 
 
 function getField()
@@ -104,6 +107,8 @@ drawField();
 function drawSubField(FieldArr)
 {
 	//ctx.clearRect(0, 0, 800, 504);
+
+	//setField(FieldArr);
 
 	for(var i = 0; i < 8; i++)
 	{ 

@@ -1,18 +1,16 @@
-
 /*
-Разбиваем поле на массив 8х8, присваеваем каждому элементу массива 0.
-При клики на клетку присваеваем этому элементу 1, далее закрашиваем его.
-
+Ð Ð°Ð·Ð±Ð¸Ð²Ð°ÐµÐ¼ Ð¿Ð¾Ð»Ðµ Ð½Ð° Ð¼Ð°ÑÑÐ¸Ð² 8Ñ…8, Ð¿Ñ€Ð¸ÑÐ²Ð°ÐµÐ²Ð°ÐµÐ¼ ÐºÐ°Ð¶Ð´Ð¾Ð¼Ñƒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ñƒ Ð¼Ð°ÑÑÐ¸Ð²Ð° 0.
+ÐŸÑ€Ð¸ ÐºÐ»Ð¸ÐºÐ¸ Ð½Ð° ÐºÐ»ÐµÑ‚ÐºÑƒ Ð¿Ñ€Ð¸ÑÐ²Ð°ÐµÐ²Ð°ÐµÐ¼ ÑÑ‚Ð¾Ð¼Ñƒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ñƒ 1, Ð´Ð°Ð»ÐµÐµ Ð·Ð°ÐºÑ€Ð°ÑˆÐ¸Ð²Ð°ÐµÐ¼ ÐµÐ³Ð¾.
 */
 
 
-//Подключаем канвас
+//ÐŸÐ¾Ð´ÐºÐ»ÑŽÑ‡Ð°ÐµÐ¼ ÐºÐ°Ð½Ð²Ð°Ñ
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 
 
- canvas.width = 800;
- canvas.height = 504;
+canvas.width = 800;
+canvas.height = 504;
 
 
 var blockSize = 1,
@@ -22,164 +20,153 @@ var blockSize = 1,
 
     subFieldPosX = 0,
     subFieldPosY = 0,
-    subFieldArr = [];
-
-    
-    
+    subFieldArr = [],
+    stopped = false;
 
 
-function getField()
-{
-	return subFieldArr;
+
+
+
+function getField() {
+    return subFieldArr;
 }
 
 
 
-//��� ������� �� ������ ���������� ����� drawSubField()
+//ïðè íàæàòèè íà êäåòêó âûçûâàåòñÿ ìåòîä drawSubField()
 
-canvas.onclick = function(event)
-{
-        //�������� ���������� �������   
-	var x = event.offsetX;
-	var y = event.offsetY;	
-	console.log(x);
-	console.log(y);
-
-
-	x = Math.floor(x/100); //800/100 = 8
-	y = Math.floor(y/63); //504/63 = 8
+canvas.onclick = function(event) {
+    //ïîëó÷àåì êîîðäèíàòû íàæàòèÿ   
+    var x = event.offsetX;
+    var y = event.offsetY;
+    // console.log(x);
+    // console.log(y);
 
 
+    x = Math.floor(x / 100); //800/100 = 8
+    y = Math.floor(y / 63); //504/63 = 8
 
-	if(subFieldArr[y][x] == 0){
-		subFieldArr[y][x] = 1;
-	}
-	else if(subFieldArr[y][x] == 1)
-	{
-	    subFieldArr[y][x] = -1
-	}else if (subFieldArr[y][x] == -1)
-	{
-		subFieldArr[y][x] = 0
-	}
 
-	console.log(subFieldArr);
-	drawSubField(subFieldArr);
-	
+
+    if (subFieldArr[y][x] == 0) {
+        subFieldArr[y][x] = 1;
+    } else if (subFieldArr[y][x] == 1) {
+        subFieldArr[y][x] = -1
+    } else if (subFieldArr[y][x] == -1) {
+        subFieldArr[y][x] = 0
+    }
+
+    //console.log(subFieldArr);
+    drawSubField(subFieldArr);
+
 
 }
 
-//�������� ���� �� ������ ������
-drawField = function()
-{
-	var n = 8, m = 8;
+//ðàçäåëÿì ïîëå íà âîñåìü ÷àñòåé
+drawField = function() {
+    var n = 8,
+        m = 8;
 
-	for(var i = 0; i < m; i++)
-	{
-		subFieldArr[i] = [];
- 
-	    for(var j = 0; j < m; j++)
-	    {
-	    	ctx.lineWidth = 1;
-			ctx.strokeStyle = myColor;
- 			ctx.strokeRect(subFieldPosX, subFieldPosY, 100, 63);      
-	    	subFieldPosX += 100;
-	    	subFieldArr[i][j] = 0;
+    for (var i = 0; i < m; i++) {
+        subFieldArr[i] = [];
 
-	    }	
+        for (var j = 0; j < m; j++) {
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = myColor;
+            ctx.strokeRect(subFieldPosX, subFieldPosY, 100, 63);
+            subFieldPosX += 100;
+            subFieldArr[i][j] = 0;
 
-	    subFieldPosX = 0;
-	    subFieldPosY += 63;
+        }
 
-	    
-	    //document.write(subFieldArr[i][j] + "   ");
-	    
-	}
+        subFieldPosX = 0;
+        subFieldPosY += 63;
+
+
+        //document.write(subFieldArr[i][j] + "   ");
+
+    }
 
 }
 
 drawField();
 
 
-function drawSubField(FieldArr)
-{
-	//ctx.clearRect(0, 0, 800, 504);
+function drawSubField(FieldArr) {
+    //ctx.clearRect(0, 0, 800, 504);
 
-	for(var i = 0; i < 8; i++)
-	{ 
-	    for(var j = 0; j < 8; j++)
-	    {
+    for (var i = 0; i < 8; i++) {
+        for (var j = 0; j < 8; j++) {
 
-	    	if(FieldArr[i][j] > 0)
-	    	{
-	    		ctx.fillStyle  = 'rgb(' + Math.floor(255-39*FieldArr[i][j]) + ',' +
+            if (FieldArr[i][j] > 0) {
+                ctx.fillStyle = 'rgb(' + Math.floor(255 - 39 * FieldArr[i][j]) + ',' +
                     '0' + ',0)';
-	    		ctx.fillRect(j*100+1, i*63+1, 98, 61);
-	    	}
-	    	else if(FieldArr[i][j] == 0)
-	    	{
-	    		ctx.fillStyle  = "white";
-	    		ctx.fillRect(j*100+1, i*63+1, 98, 61);
-	    	}
-			else if(FieldArr[i][j] < 0)
-	    	{
-	    		ctx.fillStyle  = 'rgb(0,' +
-                    Math.floor(255-39*(-FieldArr[i][j])) + ',0)';
-	    		
-	    	}
-                
-                ctx.fillRect(j*100+1, i*63+1, 98, 61);
+                ctx.fillRect(j * 100 + 1, i * 63 + 1, 98, 61);
+            } else if (FieldArr[i][j] == 0) {
+                ctx.fillStyle = "white";
+                ctx.fillRect(j * 100 + 1, i * 63 + 1, 98, 61);
+            } else if (FieldArr[i][j] < 0) {
+                ctx.fillStyle = 'rgb(0,' + Math.floor(255 - 39 * (-FieldArr[i][j])) + ',0)';
+                ctx.fillRect(j * 100 + 1, i * 63 + 1, 98, 61);
 
-	    }	
+            }
 
-	}
+
+        }
+
+    }
 }
 
 
-function randomFill()
-{
-	var fieldRandom = document.getElementById("input").value, n = 8, m = 8;
+function randomFill() {
+    var fieldRandom = document.getElementById("input").value,
+        n = 8,
+        m = 8;
+    let rand;
 
-	if(fieldRandom > 20 || fieldRandom < 3)
-	{
-		alert("��������� ���������� �� ������ ���� ������ 10 ��� ������ 3");
-	}
+    if (fieldRandom > 20 || fieldRandom < 3) {
+        alert("Ñëó÷àéíîå çàïîëíåíèå íå äîëæíî áûòü áîëüøå 10 èëè ìåíüøå 3");
+    }
 
-	for(var i = 0; i < n; i++)
-	{
-	   for(var j = 0; j < m; j++)
-	    {
-		subFieldArr[i][j] = 0;
-		ctx.fillStyle  = "white";
-	    ctx.fillRect(j*100+1, i*63+1, 98, 61);
+    for (var i = 0; i < n; i++) {
+        for (var j = 0; j < m; j++) {
+            subFieldArr[i][j] = 0;
+            ctx.fillStyle = "white";
+            ctx.fillRect(j * 100 + 1, i * 63 + 1, 98, 61);
 
-	    }	
-	}
-   for(var i = 0; i < fieldRandom; i++)
-   {				
-   			x = Math.floor(Math.random()*8); 
-			y = Math.floor(Math.random()*8); 
+        }
+    }
+    for (var i = 0; i < fieldRandom; i++) {
+        x = Math.floor(Math.random() * 8);
+        y = Math.floor(Math.random() * 8);
+        do {
             rand = Math.floor(Math.random() * (1 - (-1) + 1)) + (-1);
-         
+        } while (rand == 0)
 
 
-			
-	        console.log("x=" + x);
-	        console.log("y=" + y);
-	    	
-	    	if(subFieldArr[x][y] == 0)
-	    	{
-	    		subFieldArr[x][y] = rand;
-	    	}
+        if (subFieldArr[x][y] == 0) {
+            subFieldArr[x][y] = rand;
+        }
 
-	    	
-	  
-		
-		
-  	}
-drawSubField(subFieldArr);		
 
+
+
+
+    }
+    drawSubField(subFieldArr);
+    //console.log(subFieldArr);
+
+}
+
+ function regulationGame()
+ {
+	alert("Место действия («вселенная») — это размеченная на клетки поверхность или плоскость,безграничная, ограниченная, или замкнутая (в пределе — бесконечная плоскость).\n • Каждая клетка на этой поверхности может находиться в двух состояниях: быть «живой»(заполненной) или быть «мёртвой» (пустой). Клетка имеет восемь соседей, окружающих её.\n• Распределение живых клеток в начале игры называется первым поколением. Каждое следующее поколение рассчитывается на основе предыдущего по таким правилам: \n• в пустой (мёртвой) клетке, рядом с которой ровно три живые клетки, зарождается жизнь;\n• если у живой клетки есть две или три живые соседки, то эта клетка продолжает жить; \n в противном случае, если соседей меньше двух или больше трёх, клетка умирает («от одиночества» или «от перенаселённости»)\n•	Игра прекращается, если\n• на поле не останется ни одной «живой» клетки,\n• конфигурация на очередном шаге в точности (без сдвигов и поворотов) повторит себя же на одном из более ранних шагов (складывается периодическая конфигурация),\n• при очередном шаге ни одна из клеток не меняет своего состояния (складывается стабильная конфигурация; предыдущее правило, вырожденное до одного шага назад)");
  }
 
-
-
-
+ function stop(){
+	stopped = true;
+}
+function getStop()
+{
+	return stopped;
+}

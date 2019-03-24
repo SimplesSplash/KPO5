@@ -56,7 +56,6 @@ canvas.onclick = function(event) {
         subFieldArr[y][x] = 0
     }
 
-    //console.log(subFieldArr);
     drawSubField(subFieldArr);
 
 
@@ -82,8 +81,6 @@ drawField = function() {
         subFieldPosX = 0;
         subFieldPosY += 63;
 
-
-        //document.write(subFieldArr[i][j] + "   ");
 
     }
 
@@ -154,7 +151,6 @@ function randomFill() {
 
     }
     drawSubField(subFieldArr);
-    //console.log(subFieldArr);
 
 }
 
